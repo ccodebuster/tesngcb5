@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.*;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by Bhavesh
@@ -214,4 +216,41 @@ public class Utility extends ManageDriver {
         return destination;
     }*/
 
+    public String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        return salt.toString();
+
+    }
+
+    public static String getUniqueId() {
+        return String.format("%s_%s", UUID.randomUUID().toString().substring(0, 5), System.currentTimeMillis() / 1000);
+    }
+    public static String generateRandomEmail() {
+        return String.format("%s@%s", getUniqueId(), "yourHostName.com");
+    }
+    public static char[] generatePassword(int length) {
+        String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String specialCharacters = "!@#$";
+        String numbers = "1234567890";
+        String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+        Random random = new Random();
+        char[] password = new char[length];
+
+        password[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+        password[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+        password[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+        password[3] = numbers.charAt(random.nextInt(numbers.length()));
+
+        for(int i = 4; i< length ; i++) {
+            password[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+        }
+        return password;
+    }
 }
